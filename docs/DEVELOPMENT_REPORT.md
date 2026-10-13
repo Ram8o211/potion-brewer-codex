@@ -100,7 +100,7 @@ Browser storage is not guaranteed permanent or synchronized. Users should export
 
 ## Publication status
 
-The source is ready on development branch `codex/potion-brewer`, with the validation and Pages workflow included. The pull request, merge, and remote CI results will be recorded after publication; no pull-request or deployment URL is asserted here yet.
+[Pull request #1](https://github.com/Ram8o211/potion-brewer-codex/pull/1) was merged into `main` at commit `3fcd1933eea5e45f74e61b54c33f12a176d29d05` after [pull-request CI](https://github.com/Ram8o211/potion-brewer-codex/actions/runs/38481767774) passed model tests, TypeScript/build, and browser gameplay. The [merged-source production run](https://github.com/Ram8o211/potion-brewer-codex/actions/runs/38482072286) also passed Test and build and uploaded the `github-pages` production artifact (ID `11858200717`). Its Deploy GitHub Pages job failed at Prepare GitHub Pages, and Publish website was skipped. The game has therefore been built and published as source and a downloadable build artifact; it is not verified live on Pages.
 
 Repository inspection confirmed `has_pages: false`. The connected GitHub tools report repository administrator permission, but expose no Pages configuration setter, and CLI API access is unavailable in this session. The workflow can request initial setup through an optional `PAGES_SETUP_TOKEN` with the required GitHub permissions. Otherwise an administrator must select **Settings → Pages → Build and deployment → Source → GitHub Actions**, as described in [deployment instructions](DEPLOYMENT.md).
 
