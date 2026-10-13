@@ -1,8 +1,21 @@
 {
-  "name": "potion-brewer", "version": "1.0.0", "private": true, "type": "module",
+  "name": "potion-brewer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0", "build": "tsc --noEmit && vite build", "preview": "vite preview --host 0.0.0.0",
-    "test": "vitest run", "test:browser": "playwright test", "check": "tsc --noEmit"
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "check": "tsc --noEmit"
   },
-  "devDependencies": {"@playwright/test": "^1.56.0", "typescript": "^5.9.3", "vite": "^7.1.9", "vitest": "^3.2.4"}
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^26.6.5",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^3.2.4"
+  }
 }
