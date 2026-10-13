@@ -13,7 +13,7 @@ export interface World { seed: string; ingredients: Ingredient[]; reactions: Rea
 export interface Cell { composition: Record<string, number>; mass: number; phase: Phase; temperature: number; agitation: number; vx: number; vy: number; }
 export interface PotionMetrics extends Effects { temperature: number; viscosity: number; acidity: number; volatility: number; density: number; homogeneity: number; mass: number; }
 export interface Sample { composition: Record<string, number>; mass: number; metrics: PotionMetrics; signature: string; steps: string[]; }
-export interface SimulationSnapshot { width: number; height: number; cells: (Cell | null)[]; heat: number; lid: boolean; elapsed: number; escaped: number; oxygen: number; events: string[]; }
+export interface SimulationSnapshot { width: number; height: number; cells: (Cell | null)[]; heat: number; lid: boolean; elapsed: number; escaped: number; oxygen: number; events: string[]; ticks?: number; remainder?: number; lidTemperature?: number; heatEfficiency?: number; coolingEfficiency?: number; }
 export interface Requirement { property: keyof PotionMetrics; min?: number; max?: number; target?: number; weight: number; label: string; }
 export interface Commission { id: number; customer: string; role: string; portrait: string; dialogue: string; title: string; budget: number; requirements: Requirement[]; }
 export interface Experiment { id: string; subject: string; name: string; signature: string; metrics: Partial<PotionMetrics>; observation: string; composition: Record<string, number>; steps: string[]; time: number; }

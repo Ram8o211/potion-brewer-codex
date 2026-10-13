@@ -32,6 +32,7 @@ export function decodeSave(text: string): GameState {
   if (raw.simulation) {
     const sim = raw.simulation;
     if (sim.width !== 64 || sim.height !== 56 || !Array.isArray(sim.cells) || sim.cells.length !== 64 * 56 || !finite(sim.heat, -1, 1) || !finite(sim.elapsed, 0, 1e12) || !finite(sim.escaped, 0, 1e7) || !finite(sim.oxygen, 0, 1) || typeof sim.lid !== 'boolean' || !strings(sim.events, 100)) throw new Error('The laboratory snapshot is invalid.');
+    for (const [key, min, max] of [['ticks', 0, 1e12], ['remainder', 0, 2], ['lidTemperature', -200, 2000], ['heatEfficiency', 0.1, 10], ['coolingEfficiency', 0.1, 10]] as const) if (sim[key] !== undefined && !finite(sim[key], min, max)) throw new Error('The laboratory history is invalid.');
     for (const cell of sim.cells) if (cell && (!finite(cell.mass, 0, 100) || !finite(cell.temperature, -200, 2000) || !['liquid', 'powder', 'solid', 'gas', 'paste'].includes(cell.phase) || !cell.composition || !Object.values(cell.composition).every(v => finite(v, 0, 100)) || !finite(cell.agitation, 0, 1e6) || !finite(cell.vx, -1e6, 1e6) || !finite(cell.vy, -1e6, 1e6))) throw new Error('The save contains an invalid material cell.');
   }
   return structuredClone(raw);
