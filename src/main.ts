@@ -1,3 +1,4 @@
+import './render/fonts.css';
 import './ui/styles.css';
 import { Game } from './game/game';
 import { createWorld } from './game/world';
@@ -10,6 +11,7 @@ const root = document.querySelector<HTMLElement>('#app')!;
 const audio = new AlchemyAudio();
 const saved = loadGame();
 let game = new Game(createWorld(saved?.seed || 'moonlit-1347'), saved);
+if (!saved) game.state.settings.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let app: ReturnType<typeof mountApp>;
 let lastSave = performance.now();
 let lastFrame = performance.now();
@@ -20,6 +22,7 @@ let slowFrames = 0;
 let adaptiveLow = false;
 
 function save(): void {
+  audio.configure(game.state.settings.sound, game.state.settings.volume);
   if (!persistGame(game.exportState())) game.lastMessage = 'Browser storage is full or unavailable. Export your save from Settings to keep your progress.';
   lastSave = performance.now();
 }
@@ -50,17 +53,19 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) save(
 window.addEventListener('pagehide', save);
 
 function frame(now: number): void {
-  const elapsed = Math.min(0.05, Math.max(0, (now - lastFrame) / 1000));
+  const frameDuration = Math.max(0, now - lastFrame);
+  const elapsed = Math.min(0.05, frameDuration / 1000);
   lastFrame = now;
   if (!document.hidden) {
     const start = performance.now(); game.tick(elapsed); performanceInfo.simulationMs = performance.now() - start;
-    frameSamples.push(elapsed * 1000); if (frameSamples.length > 60) frameSamples.shift();
+    frameSamples.push(frameDuration); if (frameSamples.length > 60) frameSamples.shift();
     const average = frameSamples.reduce((a, b) => a + b, 0) / frameSamples.length;
     performanceInfo = { ...performanceInfo, fps: Math.round(1000 / Math.max(average, 1)), frameMs: average, frames: performanceInfo.frames + 1 };
     slowFrames = average > 25 ? Math.min(120, slowFrames + 1) : Math.max(0, slowFrames - 1);
     adaptiveLow = slowFrames > 60;
     const quality = game.state.settings.quality;
-    if (now - lastRender >= (quality === 'low' || (quality === 'auto' && adaptiveLow) ? 32 : 14)) { app.update(elapsed); lastRender = now; }
+    document.documentElement.dataset.renderQuality = quality === 'auto' ? (adaptiveLow ? 'low' : 'high') : quality;
+    if (now - lastRender >= (quality === 'low' || (quality === 'auto' && adaptiveLow) ? 32 : 14)) { app.update(Math.min(0.1, (now - lastRender) / 1000)); lastRender = now; }
     if (now - lastSave > 5000) save();
   }
   requestAnimationFrame(frame);
